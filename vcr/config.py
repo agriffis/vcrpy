@@ -199,22 +199,29 @@ class VCR(object):
             'ignore_localhost', self.ignore_localhost
         )
         if filter_headers:
+            filter_headers = [h if isinstance(h, tuple) else (h, None)
+                              for h in filter_headers]
             filter_functions.append(
                 functools.partial(
-                    filters.remove_headers,
-                    headers_to_remove=filter_headers
+                    filters.replace_headers,
+                    replacements=filter_headers,
                 )
             )
         if filter_query_parameters:
+            filter_query_parameters = [p if isinstance(p, tuple) else (p, None)
+                                       for p in filter_query_parameters]
             filter_functions.append(functools.partial(
-                filters.remove_query_parameters,
-               query_parameters_to_remove=filter_query_parameters
+                filters.replace_query_parameters,
+                replacements=filter_query_parameters,
             ))
         if filter_post_data_parameters:
+            filter_post_data_parameters = [p if isinstance(p, tuple)
+                                           else (p, None)
+                                           for p in filter_post_data_parameters]
             filter_functions.append(
                 functools.partial(
-                    filters.remove_post_data_parameters,
-                    post_data_parameters_to_remove=filter_post_data_parameters
+                    filters.replace_post_data_parameters,
+                    replacements=filter_post_data_parameters,
                 )
             )
 
